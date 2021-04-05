@@ -1,0 +1,186 @@
+{% include 'base.html' %}
+{% load static %}
+
+<style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        h1{
+            padding: 12px 0;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .star-rating{
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(0,235,102,0.8575805322128851) 0%, rgba(30,143,170,0.7819502801120448) 100%);
+        }
+
+        .stars{
+            width: 400px;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+
+        }
+        .star{
+            list-style: none;
+            font-size: 2rem;
+            padding-left: 20px;
+            color: white;
+        }
+
+        .star:first-child{
+            padding:0;
+        }
+
+        .output{
+            width: 400px;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            background: #00b894;
+            font-size: 1.2rem;
+
+        }
+        .next{
+            width: 100px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            background: #00b894;
+            font-size: 1.2rem;
+            outline: none;
+            border: none;
+        }
+        .next:hover{
+            color: #00b894;
+            background: white;
+            border: 2px solid #00b894;
+            cursor: pointer;
+        }
+        .orange{
+            color: orange;
+        }
+
+        .yellow{
+            color: yellow;
+        }
+
+    </style>
+
+{% block content %}
+
+
+<h1>{{roomsData.location}}</h1>
+<form method="POST">
+    {% csrf_token %}
+    <div class="star-rating">
+        <img src="{{ roomsData.image.url }}" width="450">
+
+        <ul class="stars">
+            <li class="star"><i class="fa fa-star" aria-hidden="true"></i></li>
+            <li class="star"><i class="fa fa-star" aria-hidden="true"></i></li>
+            <li class="star"><i class="fa fa-star" aria-hidden="true"></i></li>
+            <li class="star"><i class="fa fa-star" aria-hidden="true"></i></li>
+            <li class="star"><i class="fa fa-star" aria-hidden="true"></i></li>
+        </ul>
+
+
+
+        <p class="output"> Ratings </p>
+        <br>
+        <p> {{roomsData.description}} </p>
+        <br>
+        <button class="next" onclick="nextPage()">Submit</button>
+    </div>
+</form>
+
+
+<script>
+
+        const stars = document.querySelectorAll('.star');
+        const output = document.querySelector('.output');
+
+        // console.log(stars);
+
+        for(x=0; x<stars.length; x++){
+            stars[x].starValue = (x+1);
+            // stars[x].addEventListener('click', function(){
+            // console.log("I am clicked");
+        // })
+
+        ["click", "mouseover", "mouseout"].forEach(function(e){
+            stars[x].addEventListener(e, showRating);
+        })
+
+        }
+
+        function showRating(e){
+            let type = e.type;
+            // console.log(type);
+            let starValue = this.starValue;
+            // console.log(starValue);
+
+            if(type === 'click'){
+                   if(starValue > 1){
+                       output.innerHTML = "You rated this " + starValue + " stars.";
+                   }
+                }
+
+            stars.forEach(function(elem, ind){
+                if(type === 'click'){
+                    if(ind< starValue){
+                        elem.classList.add("orange");
+                    }else{
+                        elem.classList.remove("orange");
+                    }
+                }
+
+                if(type === 'mouseover'){
+                    if(ind< starValue){
+                        elem.classList.add("yellow");
+                    }else{
+                        elem.classList.remove("yellow");
+                    }
+                }
+
+                if(type === 'mouseout'){
+                     elem.classList.remove("yellow");
+
+                }
+
+
+
+
+            })
+        }
+
+
+
+
+    </script>
+
+
+
+
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
