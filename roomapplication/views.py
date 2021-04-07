@@ -1,23 +1,20 @@
-from django.shortcuts import render, redirect,get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, Http404
 from .forms import UserRegisterForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 
-
 from django.contrib import messages
 
 import json
-
 
 from django.contrib.auth.decorators import login_required
 
 from .models import Room, Rating
 
 
-
 # Create your views here.
-@login_required(login_url='login')
+
 def home(request):
     return render(request, 'home.html')
 
@@ -57,14 +54,16 @@ def loginPage(request):
         context = {}
         return render(request, "login.html", context)
 
+
 def logoutUser(request):
     logout(request)
-    return render(request, "login.html")
+    return render(request, "home.html")
 
 
 def aboutPage(request):
     return render(request, 'aboutus.html')
 
+@login_required(login_url="login")
 def roomPage(request):
     data = {
         'roomsData': Room.objects.all()
@@ -75,15 +74,16 @@ def roomPage(request):
 def contactPage(request):
     return render(request, 'contactus.html')
 
+
 def rating(request, id):
     if not request.user.is_authenticated:
         return redirect("login")
     if not request.user.is_active:
         raise Http404
-    location= get_object_or_404(Room, id=id)
+    location = get_object_or_404(Room, id=id)
 
     if request.method == "POST":
-        rate = request.POST['starValue']
+        rate = request.POST['rating']
         ratingObject = Rating()
         ratingObject.user = request.user
         ratingObject.location = location
@@ -92,9 +92,8 @@ def rating(request, id):
 
         return redirect("room")
 
-
-    data={
-        'roomsData': Room.objects.get(id=id)
+    ID = Room.objects.get(id=id)
+    data = {
+        'roomsData': ID
     }
-    return render(request, 'rating.html',data)
-
+    return render(request, 'rating.html', data)

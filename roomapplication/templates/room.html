@@ -6,31 +6,35 @@
 
 
 <style>
+.image-thumbail{
+    height: 300px;
+    width:320px;
+
+
+}
 .gallery-block{
-    padding-bottom: 30px;
-    padding-top: 30px;
+    padding-bottom: 10px;
+    padding-top: 10px;
 }
 
 .gallery-block .heading{
     margin-bottom: 30px;
     text-align: center;
 }
-
 .gallery-block .heading h2{
     font-weight: bold;
     font-size: 1.5rem;
     text-transform: uppercase;
 }
 
-.gallery-block.cards-gallery h6{
+.gallery-block.cards-gallery h6 {
     font-size: 27px;
     font-weight: bold;
 
 }
-
 .gallery-block.cards-gallery .card{
-    transition: 0.4s easy;
-    float: right;
+   transition: 0.4s easy;
+   float: left;
 }
 
 .gallery-block.cards-gallery .card img{
@@ -38,17 +42,18 @@
     height:300px;
     width:320px;
     margin: 10px;
-    float:right;
+    float:left;
     padding: 5px;
 }
 
-.gallery-block.cards-gallery .card-body{
+.gallery-block.cards-gallery .card-body {
     text-align: center;
+
 
 }
 
 .gallery-block.cards-gallery .card-body p{
-    font-size: 15px;
+   font-size: 15px;
 }
 
 .gallery-block.cards-gallery a{
@@ -63,59 +68,60 @@
 
 }
 
-.gallery-block.cards-gallery .card{
+.gallery-block.cards-gallery .card {
     margin-bottom: 30px;
-    box-shadow: 0px 2px 10px rgba(0,0,0,0.15);
-
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.15);
 }
-.caption{
+
+
+.caption {
     margin: 5px;
     padding: 5px;
 }
-@media (min-width:576px){
-    .gallery-block .transform-on-hover:hover{
-        transform: translateY(-10px) scale(1.02);
-        box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.15) !important;
 
+
+
+@media (min-width:576px) {
+    .gallery-block .transform-on-hover:hover {
+     transform: translateY(-10px) scale(1.02);
+     box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.15) !important;
     }
 }
 
+
+
+
 </style>
 
-    <section class="gallery-block cards-gallery">
+
+
+ <section class="gallery-block cards-gallery">
         <div class="container">
             <div class="heading">
                 <h2>Rooms For Rent</h2>
             </div>
-            {% for room in roomsData %}
+        <div class="col-md-12">
             <div class="row">
-                <div class="col-md-6 col-lg-4">
-                    <div class="card border-0 transform-on-hover">
-
-                        <a class="lightbox" href="{{ room.image.url }}"><img src="{{ room.image.url }}" class="card-img-top"></a>
-
-                        <div class="caption">
-
-
-                     <div class="mid"> <a href="{% url 'rating' room.id %}"  class="btn btn-primary btn-sm" role="button">Give Rating . . . </a></div>
-
-
+                {% for room in roomsData %}
+                <div class="col-md-4">
+                    <div class="card my-3 transform-on-hover">
+                    <img class="image-thumbail" src="{{room.image.url}}" alt="Card image cap">
+                <div class="caption">
+                    <div class="mid"> <a href="{% url 'rating' room.id %}"  class="btn btn-outline-dark btn-sm m-1" role="button">Give Rating . . . </a></div>
                 </div>
-                        <div class="card-body">
-                            <h6>{{ room.location }}</h6>
-
-                            <p class="text-muted card-text">{{ room.description }}</p>
-                        </div>
+                    <div class="card-body">
+                        <h6>{{ room.location }}</h6>
+                        <p class="card-text">{{ room.description|safe|slice:100 }}</p>
                     </div>
                 </div>
-
-            </div>
-
+                </div>
                  {% endfor %}
-
             </div>
         </div>
-    </section>
+        </div>
+ </section>
+
+
 
 
 

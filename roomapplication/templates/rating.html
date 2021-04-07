@@ -32,14 +32,14 @@
 
 
         }
-        .star{
+        .stars{
             list-style: none;
             font-size: 2rem;
             padding-left: 20px;
             color: white;
         }
 
-        .star:first-child{
+        .stars:first-child{
             padding:0;
         }
 
@@ -81,97 +81,91 @@
 {% block content %}
 
 
-<h1>{{roomsData.location}}</h1>
+
 <form method="POST">
     {% csrf_token %}
-    <div class="star-rating">
-        <img src="{{ roomsData.image.url }}" width="450">
+<!--    <div class="star-rating">-->
+<!--        <img src="{{ roomsData.image.url }}" width="450">-->
 
-        <ul class="stars">
-            <li class="star"><i class="fa fa-star" aria-hidden="true"></i></li>
-            <li class="star"><i class="fa fa-star" aria-hidden="true"></i></li>
-            <li class="star"><i class="fa fa-star" aria-hidden="true"></i></li>
-            <li class="star"><i class="fa fa-star" aria-hidden="true"></i></li>
-            <li class="star"><i class="fa fa-star" aria-hidden="true"></i></li>
-        </ul>
+<!--        <ul class="stars">-->
+<!--            <li class="star"><i class="fa fa-star" aria-hidden="true"></i></li>-->
+<!--            <li class="star"><i class="fa fa-star" aria-hidden="true"></i></li>-->
+<!--            <li class="star"><i class="fa fa-star" aria-hidden="true"></i></li>-->
+<!--            <li class="star"><i class="fa fa-star" aria-hidden="true"></i></li>-->
+<!--            <li class="star"><i class="fa fa-star" aria-hidden="true"></i></li>-->
+<!--        </ul>-->
 
 
 
-        <p class="output"> Ratings </p>
-        <br>
-        <p> {{roomsData.description}} </p>
-        <br>
-        <button class="next" onclick="nextPage()">Submit</button>
-    </div>
+<!--        <p class="output"> Ratings </p>-->
+<!--        <br>-->
+<!--        <p> {{roomsData.description}} </p>-->
+<!--        <br>-->
+<!--        <button class="next" onclick="nextPage()">Submit</button>-->
+<!--    </div>-->
+<!--</form>-->
+
+<h1>{{roomData.location}}</h1>
+<form class="form-horizontal" role="search" method="post" action="{% url 'rating' roomsData.id %}" onsubmit="return validateForm()"  name="ratingForm">
+    {% csrf_token %}
+ <div class="star-rating">
+     <img src="{{ roomsData.image.url }}" width="450">
+
+                      <div class="stars">
+                        <span class="fa fa-star-o" data-rating="1"></span>
+                        <span class="fa fa-star-o" data-rating="2"></span>
+                        <span class="fa fa-star-o" data-rating="3"></span>
+                        <span class="fa fa-star-o" data-rating="4"></span>
+                        <span class="fa fa-star-o" data-rating="5"></span>
+
+                     <input type="hidden" name="rating" class="rating-value" value="0" >
+
+                      </div>
+                    <p> {{roomsData.description|safe}} </p>
+                     <input type="submit" class="next" value="submit">
+ </div>
 </form>
 
 
-<script>
 
-        const stars = document.querySelectorAll('.star');
-        const output = document.querySelector('.output');
 
-        // console.log(stars);
 
-        for(x=0; x<stars.length; x++){
-            stars[x].starValue = (x+1);
-            // stars[x].addEventListener('click', function(){
-            // console.log("I am clicked");
-        // })
+<script type="text/javascript" src="{%static 'js/jquery.min.js'%}"></script>
 
-        ["click", "mouseover", "mouseout"].forEach(function(e){
-            stars[x].addEventListener(e, showRating);
-        })
+	<script type="text/javascript" src="{%static 'js/bootstrap.min.js'%}"></script>
+    <script type="text/javascript">
+    var $star_rating = $('.star-rating .fa');
 
+    var SetRatingStar = function() {
+        return $star_rating.each(function() {
+        if (parseInt($star_rating.siblings('input.rating-value').val()) >= parseInt($(this).data('rating'))) {
+            return $(this).removeClass('fa-star-o').addClass('fa-star');
+        } else {
+        return $(this).removeClass('fa-star').addClass('fa-star-o');
         }
+        });
+        };
 
-        function showRating(e){
-            let type = e.type;
-            // console.log(type);
-            let starValue = this.starValue;
-            // console.log(starValue);
+    $star_rating.on('click', function() {
+    $star_rating.siblings('input.rating-value').val($(this).data('rating'));
+    return SetRatingStar();
+    });
 
-            if(type === 'click'){
-                   if(starValue > 1){
-                       output.innerHTML = "You rated this " + starValue + " stars.";
-                   }
-                }
+    SetRatingStar();
+    $(document).ready(function() {
 
-            stars.forEach(function(elem, ind){
-                if(type === 'click'){
-                    if(ind< starValue){
-                        elem.classList.add("orange");
-                    }else{
-                        elem.classList.remove("orange");
-                    }
-                }
+    });
 
-                if(type === 'mouseover'){
-                    if(ind< starValue){
-                        elem.classList.add("yellow");
-                    }else{
-                        elem.classList.remove("yellow");
-                    }
-                }
-
-                if(type === 'mouseout'){
-                     elem.classList.remove("yellow");
-
-                }
-
-
-
-
-            })
-        }
-
-
-
-
-    </script>
-
-
-
+</script>
+<script type="text/javascript">
+    function validateForm(){
+    var x = document.forms["ratingForm"]["rating"].value;
+    if(x=="0"){
+        alert("Invalid Input");
+        return false;
+    }
+    }
+</script>
 
 
 
