@@ -6,11 +6,13 @@ from django.contrib.auth import authenticate, login, logout
 
 from django.contrib import messages
 
+from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
+
 import json
 
 from django.contrib.auth.decorators import login_required
 
-from .models import Room, Rating
+from .models import *
 
 
 # Create your views here.
@@ -65,10 +67,20 @@ def aboutPage(request):
 
 @login_required(login_url="login")
 def roomPage(request):
+    room = Room.objects.all()
+    paginator = Paginator(room, 3)
+    page = request.GET.get('page')
+    try:
+        rooms = paginator.page(page)
+    except PageNotAnInteger:
+        rooms = paginator.page(1)
+    except EmptyPage:
+        rooms = paginator.page(paginator.num_pages)
     data = {
-        'roomsData': Room.objects.all()
+        'roomsData': rooms,
+        'page': page
     }
-    return render(request, 'room.html', data)
+    return render(request, 'room.html',data)
 
 
 def contactPage(request):
