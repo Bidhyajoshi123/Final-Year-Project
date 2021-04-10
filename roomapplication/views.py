@@ -68,7 +68,7 @@ def aboutPage(request):
 @login_required(login_url="login")
 def roomPage(request):
     room = Room.objects.all()
-    paginator = Paginator(room, 3)
+    paginator = Paginator(room, 6)
     page = request.GET.get('page')
     try:
         rooms = paginator.page(page)
