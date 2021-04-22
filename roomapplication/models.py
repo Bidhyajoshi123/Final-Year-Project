@@ -21,5 +21,4 @@ class Rating(models.Model):
     location = models.ForeignKey(Room, on_delete=models.CASCADE)
     rating = models.IntegerField(default=1, validators=[MaxValueValidator(5), MinValueValidator(0)])
 
-    def __str__(self):
-        return self.user
+

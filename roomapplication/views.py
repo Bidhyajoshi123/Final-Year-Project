@@ -67,20 +67,37 @@ def aboutPage(request):
 
 @login_required(login_url="login")
 def roomPage(request):
+    # room = Room.objects.all()
+    # paginator = Paginator(room, 6)
+    # page = request.GET.get('page')
+    # try:
+    #     rooms = paginator.page(page)
+    # except PageNotAnInteger:
+    #     rooms = paginator.page(1)
+    # except EmptyPage:
+    #     rooms = paginator.page(paginator.num_pages)
+    # data = {
+    #     'roomsData': rooms,
+    #     'page': page
+    # }
+
+    # page = request.GET.get('page')
+    # try:
+    #     post_list = paginator.page(page)
+    # except PageNotAnInteger:
+    #
+    #     post_list = paginator.page(1)
+    # except EmptyPage:
+    #
+    #     post_list = paginator.page(paginator.num_pages)
+    # return render(request, 'room.html',{'roomsData':post_list,'page':page})
+
     room = Room.objects.all()
     paginator = Paginator(room, 6)
-    page = request.GET.get('page')
-    try:
-        rooms = paginator.page(page)
-    except PageNotAnInteger:
-        rooms = paginator.page(1)
-    except EmptyPage:
-        rooms = paginator.page(paginator.num_pages)
-    data = {
-        'roomsData': rooms,
-        'page': page
-    }
-    return render(request, 'room.html',data)
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'room.html', {'page_obj': page_obj})
 
 
 def contactPage(request):
