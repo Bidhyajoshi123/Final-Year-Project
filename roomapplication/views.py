@@ -9,11 +9,12 @@ from django.contrib import messages
 from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 
 import json
+from ast import literal_eval as make_tuple
 
 from django.contrib.auth.decorators import login_required
 
 from .models import *
-
+import requests
 
 # Create your views here.
 
@@ -126,3 +127,32 @@ def rating(request, id):
         'roomsData': ID
     }
     return render(request, 'rating.html', data)
+
+
+
+
+@login_required(login_url='login')
+def recommend(request):
+    user_id = request.user.id
+    url = "http://127.0.0.1:5000/recommend"
+    payload = {'user_id':user_id}
+    headers = {
+        'content-type': "multipart/form-data",
+        'cache-control': "no-cache",
+
+    }
+
+    responses = requests.request("POST",url,data=payload)
+    # import pdb;pdb.set_trace()
+    response = json.loads(responses.text)
+    respnses_tuple = make_tuple(response)
+    context = list()
+
+    for user_id in respnses_tuple:
+        try:
+            recommended = Room.objects.get(id=user_id)
+            context.append(recommended)
+        except:
+            pass
+
+    return render(request,"recommend.html",{'context': context})
